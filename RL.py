@@ -1,29 +1,35 @@
-import gymnasium as gym
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
 
-# Criando um ambiente para que a IA possa treinar -> Jogo de equilibrar um pau KKKK
-env = gym.make('Taxi-v3', render_mode="human")
+def abrir_DVWA():
 
-# Reiniciar o ambiente para começar um novo episódio
-observation, info = env.reset()
+    user = str(input("Digite o nome do usuário: "))
+    senha = str(input("Digite a senha: "))
 
-print(f"Começando observação: {observation}")
+    # Abre navegador
+    driver = webdriver.Chrome()
 
-episode_over = False
-total_reward = 0
+    # Acessa DVWA
+    driver.get("http://172.16.181.129/dvwa/login.php")
 
-while not episode_over:
-    # A IA escolhe uma ação: 0 = puxar o carrinho pra esquerda; 1 = puxar o carrinho para a direita
-    action = env.action_space.sample() # Faz uma ação aleatória por enquanto - o agente vai ficar inteligente
+    # Espera carregar
+    time.sleep(2)
 
-    # Faz a ação e mostra o que acontece
-    observation, reward, terminated, truncated, info = env.step(action)
+    # Preenche usuário
+    username = driver.find_element(By.NAME, "username")
+    username.send_keys(user)
 
-    # Reward: +1 para cada passo que o PAU tiver equilibrado kkkk
-    # terminated: Verifica se a IA deixou o PAU cair (IA perde)
-    # truncated: Verifica se a IA chegou no tempo limite determinado (500 steps)
+    # Preenche senha
+    password = driver.find_element(By.NAME, "password")
+    password.send_keys(senha)
 
-    total_reward += reward
-    episode_over = terminated or truncated
+    # Pressiona Enter
+    password.send_keys(Keys.RETURN)
 
-print(f"Episódio Terminado! Recompensa total: {total_reward}")
-env.close()
+    input("Pressione ENTER para excluir execução...")
+    driver.quit()
+
+
+abrir_DVWA()
