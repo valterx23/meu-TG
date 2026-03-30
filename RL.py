@@ -120,7 +120,6 @@ epsilon_min = 0.05
 episodes = 50
 
 for episode in range(episodes):
-
     state, _ = env.reset()
 
     if random.uniform(0, 1) < epsilon:
@@ -139,7 +138,6 @@ for episode in range(episodes):
     epsilon = max(epsilon_min, epsilon * epsilon_decay)
 
     print(f"[{episode}] Payload: {env.actions[action]} | Reward: {reward}")
-
 
 best_action = np.argmax(q_table[0])
 
